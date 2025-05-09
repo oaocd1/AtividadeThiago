@@ -1,5 +1,5 @@
 function loginUser(username, password) {
-    // Envia uma solicitação de login com as credenciais
+
     fetch("http://localhost:8080/login", {
         method: "POST",
         headers: {
@@ -18,10 +18,10 @@ function loginUser(username, password) {
         const token = data.token;
         
         // Armazena o token como um cookie
-        document.cookie = `authToken=${token}; path=/`;
+        document.cookie = `token=${token}; path=/`;
 
         // Exibe o token na tela
-        displayAuthToken();
+        displaytoken();
 
         alert("Login realizado com sucesso!");
     })
@@ -73,7 +73,7 @@ function showUserList() {
 
     fetch("http://localhost:8080/user", {
         headers: {
-            "Authorization": `Bearer ${getCookie("authToken")}`
+            "Authorization": ` ${getCookie("token")}`
         }
     })
     .then(response => response.json())
@@ -156,7 +156,7 @@ function showUserForm(userId = null) {
     if (userId) {
         fetch(`http://localhost:8080/user/${userId}`, {
             headers: {
-                "Authorization": `Bearer ${getCookie("authToken")}`
+                "Authorization": ` ${getCookie("token")}`
             }
         })
         .then(response => response.json())
@@ -185,7 +185,7 @@ function showUserForm(userId = null) {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${getCookie("authToken")}`
+                    "Authorization": ` ${getCookie("token")}`
                 },
                 body: JSON.stringify(userData)
             })
@@ -206,7 +206,7 @@ function showUserForm(userId = null) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${getCookie("authToken")}`
+                    "Authorization": ` ${getCookie("token")}`
                 },
                 body: JSON.stringify(userData)
             })
@@ -232,7 +232,7 @@ function deleteUser(userId) {
         fetch(`http://localhost:8080/user/${userId}`, {
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${getCookie("authToken")}`
+                "Authorization": ` ${getCookie("token")}`
             }
         })
         .then(response => {
@@ -249,21 +249,3 @@ function deleteUser(userId) {
         });
     }
 }
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for (let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1); 
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
-
-

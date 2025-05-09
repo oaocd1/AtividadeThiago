@@ -1,3 +1,5 @@
+
+
 function toggleSubmenu(id) {
     var submenu = document.getElementById(id);
     if (submenu.style.display === "none" || submenu.style.display === "") {
@@ -15,12 +17,18 @@ function showHome() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("URL_DA_API_DO_USUARIO")
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById("user-name").textContent = data.nome || "Usuário";
-        })
-        .catch(error => console.error("Erro ao carregar dados do usuário:", error));
+    // fetch("https")
+    //     .then(response => {
+    //         // Verificar o conteúdo da resposta antes de tentar fazer o parse
+    //         if (!response.ok) {
+    //             throw new Error("Erro na resposta da API: " + response.status);
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(data => {
+    //         console.log(data); // Exibir os dados para verificar
+    //         const user = data.data[0]; // Acessando o primeiro item no array
+    //         document.getElementById("user-name").textContent = user.name || "Usuário";
+    //     })
+    //     .catch(error => console.error("Erro ao carregar dados do usuário:", error));33
 });
-
-
