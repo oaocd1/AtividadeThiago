@@ -1,3 +1,5 @@
+
+
 function showProductList() {
     const productListHTML = `
         <div class="product-header">
