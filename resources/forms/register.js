@@ -17,10 +17,9 @@ function loginUser(username, password) {
     .then(data => {
         const token = data.token;
         
-        // Armazena o token como um cookie
+        // guarda o token como cookie
         document.cookie = `token=${token}; path=/`;
 
-        // Exibe o token na tela
         displaytoken();
 
         alert("Login realizado com sucesso!");

@@ -11,12 +11,15 @@ function showProductList() {
 
     document.getElementById("main-content").innerHTML = productListHTML;
 
-    fetch("http://localhost:8080/item")
+    fetch("http://localhost:8080/item", {
+        headers: {
+            "Authorization": ` ${getCookie("token")}`
+        }
+    })
     .then(response => response.text())
     .then(text => {
         console.log("Resposta do servidor:", text);
 
-        // Tenta separar múltiplos erros concatenados
         try {
             const parsedData = tryParseJSON(text);
             if (parsedData) {
@@ -54,12 +57,12 @@ function showProductList() {
                     const table = productListContainer.querySelector("table");
                     table.addEventListener("click", function(event) {
                         const target = event.target;
-                        
+
                         if (target.classList.contains("editBtn")) {
                             const productId = target.getAttribute("data-id");
                             showProductForm(productId);
                         }
-                        
+
                         if (target.classList.contains("deleteBtn")) {
                             const productId = target.getAttribute("data-id");
                             deleteProduct(productId); 
@@ -115,25 +118,29 @@ function showProductForm(productId = null) {
     document.getElementById("main-content").innerHTML = formHTML;
 
     if (productId) {
-        fetch(`http://localhost:8080/item/${productId}`)
-            .then(response => response.text()) 
-            .then(text => {
-                console.log("Resposta do servidor:", text);
-                const parsedData = tryParseJSON(text);
-                if (parsedData) {
-                    const product = parsedData.data;
-                    if (product) {
-                        document.getElementById("name").value = product.name;
-                        document.getElementById("description").value = product.description;
-                    }
-                } else {
-                    alert("Erro ao carregar dados do produto.");
+        fetch(`http://localhost:8080/item/${productId}`, {
+            headers: {
+                "Authorization": ` ${getCookie("token")}`
+            }
+        })
+        .then(response => response.text()) 
+        .then(text => {
+            console.log("Resposta do servidor:", text);
+            const parsedData = tryParseJSON(text);
+            if (parsedData) {
+                const product = parsedData.data;
+                if (product) {
+                    document.getElementById("name").value = product.name;
+                    document.getElementById("description").value = product.description;
                 }
-            })
-            .catch(error => {
-                console.error("Erro ao carregar os dados do produto:", error);
+            } else {
                 alert("Erro ao carregar dados do produto.");
-            });
+            }
+        })
+        .catch(error => {
+            console.error("Erro ao carregar os dados do produto:", error);
+            alert("Erro ao carregar dados do produto.");
+        });
     }
 
     document.getElementById("registerProductBtn").addEventListener("click", function() {
@@ -145,7 +152,8 @@ function showProductForm(productId = null) {
             fetch(`http://localhost:8080/item/${productId}`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": ` ${getCookie("token")}`
                 },
                 body: JSON.stringify(productData)
             })
@@ -165,7 +173,8 @@ function showProductForm(productId = null) {
             fetch("http://localhost:8080/item", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": ` ${getCookie("token")}`
                 },
                 body: JSON.stringify(productData)
             })
@@ -189,7 +198,10 @@ function deleteProduct(productId) {
     const confirmDelete = confirm("Tem certeza que deseja excluir este produto?");
     if (confirmDelete) {
         fetch(`http://localhost:8080/item/${productId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": ` ${getCookie("token")}`
+            }
         })
         .then(response => {
             if (response.ok) {
