@@ -5,7 +5,21 @@ async function loadUserInfo() {
     
 
     try {
-        const response = await fetch('http://localhost:8080/user', {
+        const validate = await fetch('http://localhost:8080/user/validate', {
+            method: 'GET',
+            headers: {
+                'Authorization': `${token}`, 
+            }
+        });
+        if (!validate.ok) {
+            throw new Error(`Erro ao validar token: ${validate.statusText}`);
+        }
+        const validateText = await validate.text();
+        console.log("Resposta do servidor:", validateText);
+        const validateData = JSON.parse(validateText);
+        const userId = validateData.claims.user;
+
+         const response = await fetch('http://localhost:8080/user/' + userId, {
             method: 'GET',
             headers: {
                 'Authorization': `${token}`, 
@@ -22,9 +36,9 @@ async function loadUserInfo() {
 
         const userData = JSON.parse(responseText); 
 
-        if (userData.data && userData.data.length > 0) {
+        if (userData.data) {
          
-            const user = userData.data[0];  
+            const user = userData.data;  
             document.getElementById('user-name').textContent = user.name;  
         } else {
             console.error('Erro: Nenhum usuário encontrado');
