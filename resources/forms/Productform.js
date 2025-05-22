@@ -11,11 +11,13 @@ function showProductList() {
 
     document.getElementById("main-content").innerHTML = productListHTML;
 
+    //chamada da api
     fetch("http://localhost:8080/item", {
         headers: {
             "Authorization": ` ${getCookie("token")}`
         }
-    })
+    }) 
+    //recebe em texto e converte em json
     .then(response => response.text())
     .then(text => {
         console.log("Resposta do servidor:", text);
@@ -88,7 +90,7 @@ function showProductList() {
         showProductForm(); 
     });
 }
-
+//tenta converter o texto em json
 function tryParseJSON(text) {
     try {
         const parsed = JSON.parse(text);

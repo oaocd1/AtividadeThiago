@@ -81,7 +81,7 @@ function showUserList() {
         console.log("Resposta da API:", users);
         
         const userListContainer = document.getElementById("user-list");
-
+//converte em json e extrai os usuarios de data
         if (Array.isArray(users) && users.length > 0) {
             const tableHTML = `
                 <table class="user-table">
@@ -247,4 +247,5 @@ function deleteUser(userId) {
             alert("Erro ao excluir o usuário. Tente novamente.");
         });
     }
-}
+}   
+

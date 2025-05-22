@@ -16,7 +16,9 @@ async function login(){
             name: name,
             password: password
         })
-    }).then(response => response.json()).then((data) => {
+    })
+    //salva o token com samesite (protege contra alguns CSRF) e path
+    .then(response => response.json()).then((data) => {
         console.log('Success:', data);
         document.cookie = `token=${data.token}; samesite=lax; path=/`
         console.log(data.message)
