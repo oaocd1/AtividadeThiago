@@ -3,6 +3,10 @@ async function loadUserInfo() {
 
     console.log(token);
     
+    if (!token) {
+        window.location.href = "../pages/login.html"; // Redireciona para login se não houver token
+        return;
+    }
 
     try {
         const validate = await fetch('http://localhost:8080/user/validate', {
